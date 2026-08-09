@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user) return;
-    const s = io("http://localhost:5000");
+    const s = io("http://localhost:3000");
     s.emit("setup", user._id);
     s.on("online-users", setOnline);
     setSocket(s);
