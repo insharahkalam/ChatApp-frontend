@@ -12,6 +12,8 @@ export default function Login() {
     e.preventDefault();
     try {
       const { data } = await API.post("/auth/login", form);
+      console.log(data,"check data login");
+      
       login(data);
       nav("/");
     } catch (err) { alert(err.response?.data?.msg || "Error"); }
