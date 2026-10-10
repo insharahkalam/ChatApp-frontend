@@ -48,6 +48,8 @@ export default function Register() {
     setLoading(true);
     try {
       const { data } = await API.post("/auth/register", form);
+      console.log(data, "register data show");
+
       login(data);
       nav("/");
     } catch (err) {

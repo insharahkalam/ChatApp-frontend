@@ -1,15 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Check,
-  CheckCheck,
-  ChevronDown,
-  Trash2,
-  Pencil,
-  Copy,
-  Reply,
-  X,
-  SmilePlus,
-} from "lucide-react";
+import { Check, CheckCheck, ChevronDown, Trash2, Pencil, Copy, Reply, Timer, X, SmilePlus } from "lucide-react";
 
 const QUICK_REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
 
@@ -60,8 +50,8 @@ export default function Message({
   const renderTicks = () => {
     if (!isOwn) return null;
     if (isRead) return <CheckCheck size={16} className="text-[#53bdeb]" />;
-    if (msg.delivered) return <CheckCheck size={16} className="text-[#8696a0]" />;
-    return <Check size={16} className="text-[#8696a0]" />;
+    if (msg.delivered) return <CheckCheck size={16} className="text-gray-300" />;
+    return <Check size={16} className="text-gray-300" />;
   };
 
   const reactions = msg.reactions || {};
@@ -72,26 +62,31 @@ export default function Message({
   }, {});
   const hasReactions = Object.keys(groupedReactions).length > 0;
 
+  const barBtn =
+    "w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#ffffff0d] text-gray-400 hover:text-[#00a884] transition";
+
   return (
     <div className={`flex ${isOwn ? "justify-end" : "justify-start"} group mb-1`}>
       <div className="relative max-w-[65%]">
         {/* Floating quick-action bar on hover: reaction + reply + menu */}
         <div
-          className={`absolute -top-4 ${isOwn ? "left-0 -translate-x-full pr-1" : "right-0 translate-x-full pl-1"
-            } opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5 bg-[#233138] rounded-full shadow-lg px-1 py-1 z-30`}
+          className={`absolute -top-4 ${
+            isOwn ? "left-0 -translate-x-full pr-1" : "right-0 translate-x-full pl-1"
+          } opacity-0 group-hover:opacity-100 transition flex items-center gap-0.5 bg-[#202427] border border-gray-800 rounded-full shadow-lg px-1 py-1 z-30`}
         >
           <div className="relative" ref={reactionRef}>
             <button
               onClick={() => setReactionPickerOpen((v) => !v)}
-              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 text-[#8696a0] hover:text-white transition"
+              className={barBtn}
               title="React"
             >
               <SmilePlus size={16} />
             </button>
             {reactionPickerOpen && (
               <div
-                className={`absolute -top-12 ${isOwn ? "right-0" : "left-0"
-                  } bg-[#233138] rounded-full shadow-xl px-2 py-1.5 flex items-center gap-1 z-40`}
+                className={`absolute -top-12 ${
+                  isOwn ? "right-0" : "left-0"
+                } bg-[#202427] border border-gray-800 rounded-full shadow-xl px-2 py-1.5 flex items-center gap-1 z-40`}
               >
                 {QUICK_REACTIONS.map((emoji) => (
                   <button
@@ -100,7 +95,7 @@ export default function Message({
                       onReact?.(msg._id, emoji);
                       setReactionPickerOpen(false);
                     }}
-                    className="text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 hover:scale-125 transition-transform"
+                    className="text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#ffffff0d] hover:scale-125 transition-transform"
                   >
                     {emoji}
                   </button>
@@ -109,35 +104,38 @@ export default function Message({
             )}
           </div>
 
-          <button
-            onClick={() => onReply?.(msg)}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 text-[#8696a0] hover:text-white transition"
-            title="Reply"
-          >
+          <button onClick={() => onReply?.(msg)} className={barBtn} title="Reply">
             <Reply size={16} />
           </button>
 
           <div className="relative" ref={menuRef}>
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 text-[#8696a0] hover:text-white transition"
-              title="More"
-            >
+            <button onClick={() => setMenuOpen((v) => !v)} className={barBtn} title="More">
               <ChevronDown size={16} />
             </button>
 
             {menuOpen && (
               <div
-                className={`absolute top-8 ${isOwn ? "right-0" : "left-0"
-                  } w-44 bg-[#233138] rounded-md shadow-xl py-1.5 z-40 overflow-hidden`}
+                className={`absolute top-8 ${
+                  isOwn ? "right-0" : "left-0"
+                } w-44 bg-[#202427] border border-gray-800 rounded-xl shadow-xl py-1.5 z-40 overflow-hidden`}
               >
-                <MenuItem icon={<Reply size={15} />} label="Reply" onClick={() => { onReply?.(msg); setMenuOpen(false); }} />
+                <MenuItem
+                  icon={<Reply size={15} />}
+                  label="Reply"
+                  onClick={() => {
+                    onReply?.(msg);
+                    setMenuOpen(false);
+                  }}
+                />
                 <MenuItem icon={<Copy size={15} />} label="Copy" onClick={copyText} />
                 {isOwn && (
                   <MenuItem
                     icon={<Pencil size={15} />}
                     label="Edit"
-                    onClick={() => { setIsEditing(true); setMenuOpen(false); }}
+                    onClick={() => {
+                      setIsEditing(true);
+                      setMenuOpen(false);
+                    }}
                   />
                 )}
                 {isOwn && (
@@ -145,7 +143,10 @@ export default function Message({
                     icon={<Trash2 size={15} />}
                     label="Delete"
                     danger
-                    onClick={() => { onDelete?.(msg._id); setMenuOpen(false); }}
+                    onClick={() => {
+                      onDelete?.(msg._id);
+                      setMenuOpen(false);
+                    }}
                   />
                 )}
               </div>
@@ -155,21 +156,23 @@ export default function Message({
 
         {/* Bubble */}
         <div
-          className={`px-2.5 pt-1.5 pb-1 rounded-lg shadow-sm ${isOwn ? "bg-[#005c4b] text-[#e9edef] rounded-tr-none" : "bg-[#202c33] text-[#e9edef] rounded-tl-none"
-            } ${hasReactions ? "mb-3" : ""}`}
+          className={`px-3 pt-2 pb-1 rounded-2xl shadow-sm ${
+            isOwn
+              ? "bg-[#005c4b] text-gray-100 rounded-tr-md"
+              : "bg-[#202c33] text-gray-100 rounded-tl-md"
+          } ${hasReactions ? "mb-3" : ""}`}
         >
           {/* Quoted reply block */}
           {repliedMessage && (
-            <div
-              className={`flex mb-1.5 rounded overflow-hidden cursor-pointer ${isOwn ? "bg-black/15" : "bg-white/5"
-                }`}
-            >
-              <div className="w-1 bg-[#00a884] shrink-0" />
+            <div className="flex mb-1.5 rounded-lg overflow-hidden cursor-pointer bg-black/20">
+              <div className="w-1 shrink-0 bg-[#00a884]" />
               <div className="py-1 px-2 min-w-0">
-                <p className="text-[12.5px] font-medium text-[#00a884] truncate">
-                  {repliedMessage.sender?._id === currentUserId ? "You" : repliedMessage.sender?.name || "Unknown"}
+                <p className="text-[12.5px] font-medium truncate text-[#00a884]">
+                  {repliedMessage.sender?._id === currentUserId
+                    ? "You"
+                    : repliedMessage.sender?.name || "Unknown"}
                 </p>
-                <p className="text-[12.5px] text-[#c7c9cb] truncate">{repliedMessage.content}</p>
+                <p className="text-[12.5px] truncate text-gray-300">{repliedMessage.content}</p>
               </div>
             </div>
           )}
@@ -184,33 +187,38 @@ export default function Message({
                   if (e.key === "Enter") saveEdit();
                   if (e.key === "Escape") setIsEditing(false);
                 }}
-                className="flex-1 bg-[#0b141a] text-[#e9edef] text-[14.5px] px-2 py-1 rounded outline-none"
+                className="flex-1 text-[14.5px] px-2 py-1 rounded-lg outline-none bg-black/25 text-gray-100"
               />
-              <button onClick={saveEdit} className="text-[#00a884] text-xs font-semibold">Save</button>
-              <button onClick={() => setIsEditing(false)} className="text-[#8696a0]"><X size={16} /></button>
+              <button onClick={saveEdit} className="text-xs font-semibold text-[#00a884]">
+                Save
+              </button>
+              <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-white">
+                <X size={16} />
+              </button>
             </div>
           ) : (
             <p className="text-[14.5px] leading-snug break-words pr-6">{msg.content}</p>
           )}
 
           <div className="flex items-center justify-end gap-1 mt-0.5 select-none">
-            {msg.edited && <span className="text-[10px] text-[#8696a0] italic">edited</span>}
-            <span className="text-[10.5px] text-[#8696a0]">{time}</span>
+            {msg.disappearing && <Timer size={11} className="text-gray-400" />}
+            {msg.edited && <span className="text-[10px] italic text-gray-400">edited</span>}
+            <span className="text-[10.5px] text-gray-400">{time}</span>
             {renderTicks()}
           </div>
         </div>
 
-        {/* Floating reaction chips (bottom edge of bubble, WhatsApp style) */}
+        {/* Floating reaction chips (bottom edge of bubble) */}
         {hasReactions && (
           <div className={`absolute -bottom-3 ${isOwn ? "right-2" : "left-2"} flex gap-0.5`}>
             {Object.entries(groupedReactions).map(([emoji, count]) => (
               <button
                 key={emoji}
                 onClick={() => onReact?.(msg._id, emoji)}
-                className="bg-[#233138] rounded-full px-1.5 py-0.5 flex items-center gap-0.5 shadow-md border border-black/20 hover:scale-105 transition-transform"
+                className="bg-[#202427] rounded-full px-1.5 py-0.5 flex items-center gap-0.5 shadow-md border border-gray-800 hover:scale-105 transition-transform"
               >
                 <span className="text-[13px]">{emoji}</span>
-                {count > 1 && <span className="text-[10px] text-[#8696a0]">{count}</span>}
+                {count > 1 && <span className="text-[10px] text-gray-400">{count}</span>}
               </button>
             ))}
           </div>
@@ -224,8 +232,9 @@ function MenuItem({ icon, label, onClick, danger }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 px-4 py-2 text-[14px] transition ${danger ? "text-red-400 hover:bg-[#182229]" : "text-[#e9edef] hover:bg-[#182229]"
-        }`}
+      className={`w-full flex items-center gap-2.5 px-4 py-2 text-[14px] transition ${
+        danger ? "text-red-400 hover:bg-red-500/10" : "text-gray-200 hover:bg-[#ffffff0d]"
+      }`}
     >
       {icon}
       {label}
