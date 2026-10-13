@@ -38,7 +38,7 @@ import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const nav = useNavigate();
