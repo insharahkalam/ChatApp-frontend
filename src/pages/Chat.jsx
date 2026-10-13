@@ -30,8 +30,8 @@ export default function Chat() {
   return (
     <div className="h-screen text-white overflow-hidden bg-[#0f1316]">
       {/* Header */}
-      <h1 className="text-white bg-gray-900 text-3xl px-2 py-2 flex items-center gap-2">
-        <MessageCircle size={30} className="text-[#20c200] text-serif italic" /> WhatsApp
+      <h1 className="text-white bg-gray-900 text-3xl px-5 py-2 text-serif italic font-bold flex items-center gap-2">
+         WhatsApp
       </h1>
       <hr className="border-gray-800" />
 
