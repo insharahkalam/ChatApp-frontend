@@ -47,8 +47,8 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await API.post("/auth/register", form);
-      console.log(data, "register data show");
+      const res = await API.post("/auth/register", form);
+      console.log(res, "register data show");
 
       login(data);
       nav("/");
