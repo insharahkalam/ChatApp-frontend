@@ -44,7 +44,10 @@ export default function Register() {
   const nav = useNavigate();
 
   const submit = async (e) => {
+    console.log(form,"check dataof form");
+    
     e.preventDefault();
+
     setLoading(true);
     try {
       const res = await API.post("/auth/register", form);
@@ -83,11 +86,11 @@ export default function Register() {
           </h3>
 
           <div>
-            <label className="text-xs text-gray-500">Name</label>
+            <label className="text-xs text-gray-500">Username</label>
             <input
               placeholder="Enter your name"
               className="w-full border-b-2 border-gray-200 py-2 outline-none focus:border-[#25D366] transition-colors"
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
               required
             />
           </div>
